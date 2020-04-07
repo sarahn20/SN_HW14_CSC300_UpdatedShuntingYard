@@ -14,5 +14,6 @@ class Node
     private:
         string payload;
         Node* nextNode;
+
 };
 #endif
