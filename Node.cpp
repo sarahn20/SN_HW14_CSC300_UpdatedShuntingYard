@@ -1,6 +1,4 @@
 #include "Node.hpp"
-#include <string.h>
-using namespace std;
 
 Node::Node(string payload)
 {
