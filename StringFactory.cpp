@@ -1,34 +1,40 @@
 #include "StringFactory.hpp"
 
+bool StringFactory::isInString(string searchString, char charToFind)
+{
+    for(int i = 0; i < searchString.length(); i++)
+    {
+        if(searchString[i] == charToFind)
+        {
+            return true;
+        }
+    }
+    return false;
+}
+
 Queue* StringFactory::split(string s, string delims)
 {
-    string delimHolder = "";
-    string numHolder = "";
-    int stringSize = s.length();
-    Queue* returnQueue = new Queue;
-    for(int i = 0; i < stringSize; i++) //cycles through given string s
+    Queue* answerQ = new Queue();
+    string temp = "";
+    for(int i = 0; i < s.length(); i++)
     {
-        for(int j = 0; j < delims.length(); j++) //cycles through given delims
+        if(isInString(delims, s[i]))
         {
-            if(s.at(i) == delims.at(j)) //if the char in s is a delim
+            if(temp != "")
             {
-                delimHolder = s.at(i); //saves delim to a variable
-                if(numHolder != "") //if nums have been building up in numHolder
-                {
-                    returnQueue->enqueue(numHolder); //enqueue numHolder string to returnQueue
-                    numHolder = "";
-                }
-                returnQueue->enqueue(delimHolder);
-                break; //prevents StringFactory from adding the same char multiple times
+                answerQ->enqueue(temp);
             }
+            answerQ->enqueue((string)"" + s[i]);
+            temp = "";
         }
-        if(delimHolder == "") //if the char in s did not match a delim (if it was a number)
+        else
         {
-            numHolder = numHolder + s.at(i);
+            temp = temp + s[i];
         }
-        delimHolder = ""; //clears delimHolder for next round since only one delim is handled at a time 
     }
-    returnQueue->enqueue(numHolder); //adds the last number caught in numHolder
-    returnQueue->display();
-    return returnQueue;
+    if(temp != "")
+    {
+        answerQ->enqueue(temp);
+    }
+    return answerQ;
 }
