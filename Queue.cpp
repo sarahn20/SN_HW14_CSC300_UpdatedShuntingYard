@@ -1,55 +1,63 @@
 #include "Queue.hpp"
-#include <string.h>
-
-using namespace std;
 
 Queue::Queue()
 {
+    this->head = 0;
+    this->tail = 0;
     this->count = 0;
+}
+
+void Queue::display()
+{
+    Node* currNode = this->head;
+    while(currNode)
+    {
+        cout << currNode->getPayload() << " ";
+        currNode = currNode->getNextNode();
+    }
+    cout << "\n";
+}
+
+void Queue::enqueue(string payload)
+{
+    Node* n = new Node(payload);
+    if(this->tail)
+    {
+        this->tail->setNextNode(n);
+        this->tail = n;
+    }
+    else
+    {
+        this->head = n;
+        this->tail = n;
+    }
+    this->count++;
 }
 
 string Queue::dequeue()
 {
-    Node* nodeToReturn = this->head;
-    this->head = this->head->getNextNode();
-    string val = nodeToReturn->getPayload();
-    delete nodeToReturn;
-    this->count--;
-    return val;
-}
-
-Node* Queue::runToEndOfList()
-{
-    Node* currNode = this->head;
-    while(currNode->getNextNode())
+    if(this->head)
     {
-        currNode = currNode->getNextNode();
-    }
-    return currNode;
-    
-}
-
-void Queue::enqueue(string payload) //add to end of queue
-{
-    Node* n = new Node(payload);
-    if(!this->head)
-    {
-        this->head = n;
+        Node* temp = this->head;
+        this->head = this->head->getNextNode();
+        string val2Return = temp->getPayload();
+        delete temp;
+        this->count--;
+        return val2Return;
     }
     else
     {
-        Node* currNode = this->runToEndOfList();
-        currNode->setNextNode(n);
+        return ""; //this should never happen!!!!  Throw an exception
     }
-    this->count++;
+    
 }
-void Queue::display()
+
+int Queue::getCount()
 {
-    Node* currNode = this->head;
-    for(int i = 0; i < this->count; i++)
-    {
-        cout << currNode->getPayload() << ",";
-        currNode = currNode->getNextNode();
-    }
-    cout << "\n";
+    return this->count;
+}
+
+Node* Queue::getHead()
+{
+    return this->head;
 }
